@@ -1,0 +1,57 @@
+<html>
+<head>
+	<style>
+		body{
+		height:100%;
+		width:100%;
+		}
+	svg{
+	border:1px solid black;
+}
+	</style>
+	
+</head>
+<body>
+	<div id="container"></div>
+	<div id="container1"></div>
+	<script src="https://d3js.org/d3.v5.min.js"></script>
+	<script>
+		var width = 400, height = 400;
+let bardata = [	{
+	year:2000,pop:20},{year:2001,pop:20},{year:2002,pop:60},{year:2003,pop:70},{year:2004,pop:10},{year:2005,pop:60},{year:2006,pop:90},{year:2007,pop:100}]
+var svg = d3.select("body")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height);
+let margin=100
+var xscale = d3.scaleBand()
+    .domain(bardata.map((d) =>{return d.year}))
+    .range([0, width - margin]).padding(0.1);
+
+var yscale = d3.scaleLinear()
+	.domain([0,d3.max(bardata,(d)=>{return d.pop})])
+	.range([height-margin,0])
+let g = svg.append("g")
+		.attr("transform","translate(50,50)")
+	svg.append("g")
+		.attr("transform", `translate(50,${height-50})`)
+		.call(d3.axisBottom(xscale))
+	svg.append("g")
+		.attr("transform", `translate(50,50)`)
+		.call(d3.axisLeft(yscale))
+	g.selectAll(".bar")
+		.data(bardata)
+		.enter()
+		.append("rect")
+		
+		.classed("bar",true)
+		.attr("x", (d)=>{return xscale(d.year)})
+		.attr("y", (d)=>{return yscale(d.pop)})
+		.attr("width",xscale.bandwidth())
+		.attr("height",(d)=>{return (height-margin)-yscale(d.pop)})
+		.attr("fill","blue")
+
+
+	</script>
+</body>
+</html>
